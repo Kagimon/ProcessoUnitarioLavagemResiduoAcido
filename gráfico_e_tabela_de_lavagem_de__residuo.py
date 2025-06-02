@@ -24,14 +24,15 @@ massa_saida_aquosa_fundo = Decimal(input('Insira a vazão de efluente aquoso em 
 quantidade_de_tempo = int(input('Insira por quanto tempo quer projetar o processo? '))
 #Loop While utilizado para repetir os inputs até que uma opção correta seja inserida
 while True:
-    unidade_de_tempo = input( f'\nInforme a medida utilizada'
+    unidade_de_tempo = input(f'\nInforme a medida utilizada'
                              f'\n{GREEN}[h]{REVERSE} para horas'
                              f'\n{BLUE}[d]{REVERSE} para dias'
                              f'\n{CYAN}[m]{REVERSE} para meses'
-                             f'\n{RED}[a]{REVERSE} para anos: ' ).lower()
+                             f'\n{RED}[a]{REVERSE} para anos: ').lower()
 
     if unidade_de_tempo != 'h' and unidade_de_tempo != 'd' and unidade_de_tempo != 'm' and unidade_de_tempo != "a":
         print( f'{RED}Valor inválido!!!{REVERSE}')
+
     else:
         while True:
             conversão = input(f'Manter a medida{CYAN}[1]{REVERSE}'
@@ -130,12 +131,12 @@ massa_de_agua = fração_de_agua_saida_fundo * massa_saida_aquosa_fundo
 massa_de_saida_topo = massa_de_acido_saida_topo + massa_de_ar
 #Sessões de código utilizadas para escolher cada eixo do gráfico
 while True:
-    eixo_x = int(input(f""
-                   f"\n{REVERSE}Qual o eixo x do gráfico?"
+    eixo_x = int(input(f"\n{REVERSE}Qual o eixo x do gráfico?"
                    f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                    f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                    f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
                    f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: "))
+
     if eixo_x != 1 and eixo_x != 2 and eixo_x != 3 and eixo_x != 4:
         print(f'{RED}Valor inválido!!!{REVERSE}')
     else:
@@ -158,11 +159,12 @@ elif eixo_x == 4:
     nome_x = 'efluente aquoso'
 
 while True:
-    eixo_y = int(input("Qual o eixo y do gráfico?"
+    eixo_y = int(input("\nQual o eixo y do gráfico?"
                    f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                    f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                    f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
                    f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: "))
+
     if eixo_y != 1 and eixo_y != 2 and eixo_y != 3 and eixo_y != 4:
         print(f'{RED}Valor inválido!!!{REVERSE}')
     else:
@@ -185,7 +187,7 @@ else:
     nome_y = 'efluente aquoso'
 
 while True:
-    eixo_z = int(input("Qual o eixo z do gráfico?"
+    eixo_z = int(input ("Qual o eixo z do gráfico?"
                        f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                        f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                        f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
@@ -193,7 +195,6 @@ while True:
 
     if eixo_z != 1 and eixo_z != 2 and eixo_z != 3 and eixo_z != 4:
         print(f'{RED}Valor inválido!!!{REVERSE}')
-
     else:
         break
 
@@ -222,20 +223,20 @@ while True:
     tempo.append(count)
 
     massa_x_convertida = count * massa_x
-    if 1e+3 <= massa_x_convertida:
-        massa_x_convertida = np.format_float_scientific(round(massa_x_convertida, 4), precision=3, exp_digits=1)
+    if 1e+4 <= massa_x_convertida:
+        massa_x_convertida = np.format_float_scientific(massa_x_convertida, precision=3, exp_digits=1)
     else:
         massa_x_convertida = round(massa_x_convertida, 4)
 
     massa_y_convertida = count * massa_y
-    if 1e+3 <= massa_y_convertida:
-        massa_y_convertida = np.format_float_scientific(round(massa_y_convertida, 4), precision=3, exp_digits=1)
+    if 1e+4 <= massa_y_convertida:
+        massa_y_convertida = np.format_float_scientific(massa_y_convertida, precision=3, exp_digits=1)
     else:
         massa_y_convertida = round(massa_y_convertida, 4)
 
     massa_z_convertida = massa_z * count
-    if massa_z_convertida >= 1e+3:
-        massa_z_convertida = np.format_float_scientific(round(massa_z_convertida, 4), precision=3, exp_digits=1)
+    if 1e+4 <= massa_z_convertida:
+        massa_z_convertida = np.format_float_scientific(massa_z_convertida, precision=3, exp_digits=1)
     else:
         massa_z_convertida = round(massa_z_convertida, 4)
 
@@ -246,6 +247,7 @@ while True:
     if count == quantidade_de_tempo:
         break
 #dicionario utilizado para criar um dataframe com o Pandas
+print( "\n " )
 tabela = {f'Vazão de {nome_x} kg': lista_eixo_x,
           f'Vazão de {nome_y} kg': lista_eixo_y,
           f'Vazão de {nome_z} kg': lista_eixo_z,
@@ -257,7 +259,7 @@ pd.set_option('display.expand_frame_repr', False)
 tabela_de_vazoes = pd.DataFrame(tabela)
 print(tabela_de_vazoes)
 #dataframe salvo em arquivo.csv com informação da quantidade e unidade de tempo#
-tabela_de_vazoes.to_csv(f'tabela_De_vazões{quantidade_de_tempo}{unidade_de_tempo}.csv')
+tabela_de_vazoes.to_csv(f'{massa_de_acido_entrada_fundo}{massa_de_agua}.csv')
 
 # etapa necessária pra transformar as strings de numero em notação científica...
 # ...em variavéis do tipo float para plotar o gráfico 3d#
