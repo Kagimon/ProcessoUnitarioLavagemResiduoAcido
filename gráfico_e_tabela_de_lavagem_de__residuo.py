@@ -187,7 +187,7 @@ else:
     nome_y = 'efluente aquoso'
 
 while True:
-    eixo_z = int(input ("Qual o eixo z do gráfico?"
+    eixo_z = int(input ("\nQual o eixo z do gráfico?"
                        f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                        f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                        f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
