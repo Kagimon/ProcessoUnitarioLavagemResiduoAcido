@@ -15,32 +15,61 @@ REVERSE = "\033[m"
 lista_eixo_x = []
 lista_eixo_y = []
 lista_eixo_z = []
-#Input de variaveis utilizadas para o calculo das variaveis do processo#
-massa_entrada_gasosa_fundo = Decimal(input('Insira a vazão de efluente a ser tratado em kg/h: '))
-fração_acido_entrada_fundo = Decimal(input('Insira a fração de ácido no efluente: '))
-fração_acido_saida_topo = Decimal(input('Insira a fração de acido no efluente tratado: '))
-massa_saida_aquosa_fundo = Decimal(input('Insira a vazão de efluente aquoso em kg/h: '))
+#Input de variaveis utilizadas para o calculo das variaveis do processo, e tratamento de erros#
+while True:
+    try:
+        massa_entrada_gasosa_fundo = Decimal(input('Insira a vazão de efluente a ser tratado em kg/h: '))
+        break
 
-quantidade_de_tempo = int(input('Insira por quanto tempo quer projetar o processo? '))
+    except Exception:
+        print("Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante")
+        
+while True:
+    try:
+        fração_acido_entrada_fundo = Decimal(input('Insira a fração de ácido no efluente: '))
+        break
+    except Exception:
+        print("Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante")
+        
+while True:
+    try:
+        fração_acido_saida_topo = Decimal(input('Insira a fração de acido no efluente tratado: '))
+        break
+    except Exception:
+        print("Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante")
+
+while True:
+    try:
+        massa_saida_aquosa_fundo = Decimal(input('Insira a vazão de efluente aquoso em kg/h: '))
+        break
+    except Exception:
+        print("Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante")
+
+while True:
+    try:
+        quantidade_de_tempo = int(input('Insira por quanto tempo quer projetar o processo? '))
+        break
+    except Exception:
+        print("Valor inválido, por favor insira um número inteiro.")
+        
 #Loop While utilizado para repetir os inputs até que uma opção correta seja inserida
 while True:
-    unidade_de_tempo = input(f'\nInforme a medida utilizada'
+    unidade_de_tempo = str(input(f'\nInforme a medida utilizada'
                              f'\n{GREEN}[h]{REVERSE} para horas'
                              f'\n{BLUE}[d]{REVERSE} para dias'
                              f'\n{CYAN}[m]{REVERSE} para meses'
-                             f'\n{RED}[a]{REVERSE} para anos: ').lower()
+                             f'\n{RED}[a]{REVERSE} para anos: ').lower().split(" "))
 
-    if unidade_de_tempo != 'h' and unidade_de_tempo != 'd' and unidade_de_tempo != 'm' and unidade_de_tempo != "a":
+    if unidade_de_tempo not in "hdma":
         print( f'{RED}Valor inválido!!!{REVERSE}')
 
     else:
         while True:
-            conversão = input(f'Manter a medida{CYAN}[1]{REVERSE}'
-                      f'\nConverter a medida {GREEN}[2]{REVERSE}: ')
+            conversão = str(input(f'Manter a medida{CYAN}[1]{REVERSE}'
+                      f'\nConverter a medida {GREEN}[2]{REVERSE}: ').split(" "))
 
-            if conversão != "1" and conversão != "2":
+            if conversão not in "12":
                 print( f'{RED}Valor inválido!!!{REVERSE}')
-
             else:
                 break
         break
@@ -57,8 +86,8 @@ while True:
         break
 
     elif conversão == "2" and unidade_de_tempo == 'd':
-        unidade_de_tempo = input(f'Converter para horas{RED}(h){REVERSE}'
-                                 f'\nConverter para minutos{CYAN}(min): ').lower()
+        unidade_de_tempo = str(input(f'Converter para horas{RED}(h){REVERSE}'
+                                 f'\nConverter para minutos{CYAN}(min): ').lower().split(" "))
 
         if unidade_de_tempo == "h":
             quantidade_de_tempo = quantidade_de_tempo * 24
@@ -72,28 +101,28 @@ while True:
             print( f'{RED}Valor inválido!!!{REVERSE}')
 
     elif conversão == "2" and unidade_de_tempo == 'm':
-        unidade_de_tempo = input(f'Converter para dias{RED}[d]{REVERSE}'
-                                 f'\nConverter para horas{CYAN}[h]').lower()
+        unidade_de_tempo = str(input(f'Converter para dias{RED}[d]{REVERSE}'
+                                 f'\nConverter para horas{CYAN}[h]').lower().split(" "))
         if unidade_de_tempo == 'd':
-            quantidade_de_tempo = quantidade_de_tempo * 30
+            quantidade_de_tempo *= 30
             break
 
         elif unidade_de_tempo == 'h':
-            quantidade_de_tempo = quantidade_de_tempo * 24 * 30
+            quantidade_de_tempo *= 24 * 30
             break
 
         else:
             print( f'{RED}Valor inválido!!!{REVERSE}')
 
     else:
-        unidade_de_tempo = input(f'Converter para meses {GREEN}[m]{REVERSE}'
-                                 f'\nConverter para dias {BLUE}[d]').lower()
+        unidade_de_tempo = str(input(f'Converter para meses {GREEN}[m]{REVERSE}'
+                                 f'\nConverter para dias {BLUE}[d]').lower().split(" "))
         if unidade_de_tempo == "m":
-            quantidade_de_tempo = quantidade_de_tempo * 12
+            quantidade_de_tempo *= 12
             break
 
         elif unidade_de_tempo == "d":
-            quantidade_de_tempo = quantidade_de_tempo * 12 * 30
+            quantidade_de_tempo *= 12 * 30
             break
 
         else:
@@ -131,13 +160,13 @@ massa_de_agua = fração_de_agua_saida_fundo * massa_saida_aquosa_fundo
 massa_de_saida_topo = massa_de_acido_saida_topo + massa_de_ar
 #Sessões de código utilizadas para escolher cada eixo do gráfico
 while True:
-    eixo_x = int(input(f"\n{REVERSE}Qual o eixo x do gráfico?"
+    eixo_x = str(input(f"\n{REVERSE}Qual o eixo x do gráfico?"
                    f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                    f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                    f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
-                   f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: "))
+                   f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: ").split(" "))
 
-    if eixo_x != 1 and eixo_x != 2 and eixo_x != 3 and eixo_x != 4:
+    if eixo_x not in "1234":
         print(f'{RED}Valor inválido!!!{REVERSE}')
     else:
         break
@@ -159,26 +188,26 @@ elif eixo_x == 4:
     nome_x = 'efluente aquoso'
 
 while True:
-    eixo_y = int(input("\nQual o eixo y do gráfico?"
+    eixo_y = str(input("\nQual o eixo y do gráfico?"
                    f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                    f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                    f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
-                   f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: "))
+                   f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: ").split(" "))
 
-    if eixo_y != 1 and eixo_y != 2 and eixo_y != 3 and eixo_y != 4:
+    if eixo_y not in '1234':
         print(f'{RED}Valor inválido!!!{REVERSE}')
     else:
         break
 
-if eixo_y == 1:
+if eixo_y == "1":
     massa_y = massa_entrada_gasosa_fundo
     nome_y = 'efluente gasoso'
 
-elif eixo_y == 2:
+elif eixo_y == "2":
     massa_y = massa_de_agua
     nome_y = 'água pura'
 
-elif eixo_y == 3:
+elif eixo_y == "3":
     massa_y = massa_de_saida_topo
     nome_y = 'gás tratado'
 
@@ -187,26 +216,26 @@ else:
     nome_y = 'efluente aquoso'
 
 while True:
-    eixo_z = int(input ("\nQual o eixo z do gráfico?"
+    eixo_z = str(input("\nQual o eixo z do gráfico?"
                        f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
                        f"\n{GREEN}[2]{REVERSE} Vazão de entrada de água pura"
                        f"\n{CYAN}[3]{REVERSE} Vazão de saida de gás tratado"
-                       f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: "))
+                       f"\n{BLUE}[4]{REVERSE} Vazão de saida de efluente aquoso: ").split(" "))
 
-    if eixo_z != 1 and eixo_z != 2 and eixo_z != 3 and eixo_z != 4:
+    if eixo_y not in '1234':
         print(f'{RED}Valor inválido!!!{REVERSE}')
     else:
         break
 
-if eixo_z == 1:
+if eixo_z == "1":
     massa_z = massa_entrada_gasosa_fundo
     nome_z = 'efluente gasoso'
 
-elif eixo_z == 2:
+elif eixo_z == "2":
     massa_z = massa_de_agua
     nome_z = 'água pura'
 
-elif eixo_z == 3:
+elif eixo_z == "3":
     massa_z = massa_de_saida_topo
     nome_z = 'gás tratado'
 
@@ -223,22 +252,8 @@ while True:
     tempo.append(count)
 
     massa_x_convertida = count * massa_x
-    if 1e+4 <= massa_x_convertida:
-        massa_x_convertida = np.format_float_scientific(massa_x_convertida, precision=3, exp_digits=1)
-    else:
-        massa_x_convertida = round(massa_x_convertida, 4)
-
     massa_y_convertida = count * massa_y
-    if 1e+4 <= massa_y_convertida:
-        massa_y_convertida = np.format_float_scientific(massa_y_convertida, precision=3, exp_digits=1)
-    else:
-        massa_y_convertida = round(massa_y_convertida, 4)
-
-    massa_z_convertida = massa_z * count
-    if 1e+4 <= massa_z_convertida:
-        massa_z_convertida = np.format_float_scientific(massa_z_convertida, precision=3, exp_digits=1)
-    else:
-        massa_z_convertida = round(massa_z_convertida, 4)
+    massa_z_convertida = count * massa_z
 
     lista_eixo_x.append(massa_x_convertida)
     lista_eixo_y.append(massa_y_convertida)
@@ -248,25 +263,7 @@ while True:
         break
 #dicionario utilizado para criar um dataframe com o Pandas
 print( "\n " )
-tabela = {f'Vazão de {nome_x} kg': lista_eixo_x,
-          f'Vazão de {nome_y} kg': lista_eixo_y,
-          f'Vazão de {nome_z} kg': lista_eixo_z,
-          f'Tempo em {unidade_de_tempo}': tempo}
-
-pd.set_option('display.max_rows', 22000)
-pd.set_option('display.max_columns', 4)
-pd.set_option('display.expand_frame_repr', False)
-tabela_de_vazoes = pd.DataFrame(tabela)
-print(tabela_de_vazoes)
 #dataframe salvo em arquivo.csv com informação da quantidade e unidade de tempo#
-tabela_de_vazoes.to_csv(f'{massa_de_acido_entrada_fundo}{massa_de_agua}.csv')
-
-# etapa necessária pra transformar as strings de numero em notação científica...
-# ...em variavéis do tipo float para plotar o gráfico 3d#
-lista_eixo_x = [float(i) for i in lista_eixo_x]
-lista_eixo_y = [float(i) for i in lista_eixo_y]
-lista_eixo_z = [float(i) for i in lista_eixo_z]
-#Plotagem do gráfico 3d#
 fig = plt.figure()
 ax = plt.axes(projection="3d")
 ax.plot3D(lista_eixo_x, lista_eixo_y, lista_eixo_z, 'red')
@@ -275,4 +272,19 @@ ax.set_ylabel(f'Vazão de {nome_y} em kg', fontsize=12)
 ax.set_zlabel(f'Vazão de {nome_z} em kg', fontsize=12)
 ax.scatter3D(lista_eixo_x, lista_eixo_y, lista_eixo_z, c=(lista_eixo_z), cmap='cividis')
 plt.show()
+# etapa necessária pra transformar os decimais em notação cientifíca para melhor visualização na tabela...#
+lista_eixo_x = [np.format_float_scientific(massax, precision=3, exp_digits=1) for massax in lista_eixo_x]
+lista_eixo_y = [np.format_float_scientific(massay, precision=3, exp_digits=1) for massay in lista_eixo_y]
+lista_eixo_z = [np.format_float_scientific(massaz, precision=3, exp_digits=1) for massaz in lista_eixo_z]
+#Plotagem do gráfico 3d#
+tabela = {f'Vazão de {nome_x} kg': lista_eixo_x,
+          f'Vazão de {nome_y} kg': lista_eixo_y,
+          f'Vazão de {nome_z} kg': lista_eixo_z,
+          f'Tempo em {unidade_de_tempo}': tempo}
+pd.set_option('display.max_rows', 22000)
+pd.set_option('display.max_columns', 4)
+pd.set_option('display.expand_frame_repr', False)
+tabela_de_vazoes = pd.DataFrame(tabela)
+print(tabela_de_vazoes)
+tabela_de_vazoes.to_csv(f'{massa_de_acido_entrada_fundo}{massa_de_agua}.csv')
 
