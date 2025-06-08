@@ -27,7 +27,7 @@ while True:
 while True:
     try:
         fração_acido_entrada_fundo = Decimal("".join( input( '\nInsira a fração de ácido no efluente: ' ) ) )
-        if fração_acido_entrada_fundo > 0 or fração_acido_entrada_fundo > 1:
+        if fração_acido_entrada_fundo < 0 or fração_acido_entrada_fundo > 1:
             print( "Valor inválido, por favor insira apenas números de 0 até 1" )
         else:
             break
@@ -36,8 +36,8 @@ while True:
         print( "Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante" ) 
         
 while True:
-    fração_acido_saida_topo = Decimal( "".join( input( '\nInsira a fração de acido no efluente tratado: ' ) ) )
     try:
+        fração_acido_saida_topo = Decimal( "".join( input( '\nInsira a fração de acido no efluente tratado: ' ) ) )
         if fração_acido_saida_topo < 0 or fração_acido_saida_topo > 1:
             print( "Valor inválido, por favor insira apenas números de 0 até 1" )
         else:
