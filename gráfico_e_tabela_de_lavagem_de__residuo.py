@@ -38,7 +38,7 @@ while True:
 while True:
     try:
         fração_acido_saida_topo = Decimal( "".join( input( '\nInsira a fração de acido no efluente tratado: ' ) ) )
-        if fração_acido_saida_topo < 0 or fração_acido_saida_topo > 1:
+        if fração_acido_saida_topo < 0 or fração_acido_saida_topo > 1 or fração_acido_saida_topo == fração_acido_entrada_fundo:
             print( "Valor inválido, por favor insira apenas números de 0 até 1" )
         else:
             break
@@ -75,10 +75,10 @@ while True:
     else:
         while True:
             conversão = "".join( input( f'\nManter a medida{CYAN}[1]{REVERSE}'
-                      f'\nConverter a medida {GREEN}[2]{REVERSE}: ' ).split() )
+                      f'\nConverter a medida {GREEN}[2]{REVERSE}: \n' ).split() )
 
             if conversão not in "12":
-                print( f'{RED}Valor inválido!!!{REVERSE}' )
+                print( f'{RED}Valor inválido!!!{REVERSE}\n' )
             else:
                 break
         break
@@ -95,7 +95,7 @@ while True:
         break
 
     elif conversão == "2" and unidade_de_tempo == 'd':
-        unidade_de_tempo = "".join( input( f'\nConverter para horas{RED}(h){REVERSE}'
+        unidade_de_tempo = "".join( input( f'\nConverter para horas{GREEN}(h){REVERSE}'
                                  f'\nConverter para minutos{CYAN}(min): ' ).lower().split() )
 
         if unidade_de_tempo == "h":
@@ -111,7 +111,7 @@ while True:
 
     elif conversão == "2" and unidade_de_tempo == 'm':
         unidade_de_tempo = "".join( input( f'Converter para dias{RED}[d]{REVERSE}'
-                                 f'\nConverter para horas{CYAN}[h]' ).lower().split() )
+                                 f'\nConverter para horas{GREEN}[h]' ).lower().split() )
         if unidade_de_tempo == 'd':
             quantidade_de_tempo *= 30
             break
@@ -124,7 +124,7 @@ while True:
             print( f'{RED}Valor inválido!!!{REVERSE}' )
 
     else:
-        unidade_de_tempo = "".join( input( f'Converter para meses {GREEN}[m]{REVERSE}'
+        unidade_de_tempo = "".join( input( f'Converter para meses {CYAN}[m]{REVERSE}'
                                  f'\nConverter para dias {BLUE}[d]').lower().split() )
         if unidade_de_tempo == "m":
             quantidade_de_tempo *= 12
@@ -263,28 +263,17 @@ while True:
     massa_y_convertida = count * massa_y
     massa_z_convertida = count * massa_z
 
-    lista_eixo_x.append( float( massa_x_convertida ) )
-    lista_eixo_y.append( float( massa_y_convertida ) )
-    lista_eixo_z.append( float( massa_z_convertida ) )
+# etapa necessária pra transformar os decimais em notação cientifíca para melhor visualização na tabela...#
+#exibição do dataframe#
+    lista_eixo_x.append( np.format_float_scientific( float(massa_x_convertida), precision=3, exp_digits=1 ) )
+    lista_eixo_y.append( np.format_float_scientific( float(massa_y_convertida), precision=3, exp_digits=1 ) )
+    lista_eixo_z.append( np.format_float_scientific( float(massa_z_convertida), precision=3, exp_digits=1 ) )
 
     if count == quantidade_de_tempo:
         break
 
 print( "\n" )
-#plotagem do gráfico#
-fig = plt.figure()
-ax = plt.axes( projection="3d" )
-ax.plot3D( lista_eixo_x, lista_eixo_y, lista_eixo_z, 'red' )
-ax.set_xlabel( f'Vazão de {nome_x} em kg', fontsize=12 )
-ax.set_ylabel( f'Vazão de {nome_y} em kg', fontsize=12 )
-ax.set_zlabel( f'Vazão de {nome_z} em kg', fontsize=12 )
-ax.scatter3D( lista_eixo_x, lista_eixo_y, lista_eixo_z, c=(lista_eixo_z), cmap='cividis' )
-plt.show()
-# etapa necessária pra transformar os decimais em notação cientifíca para melhor visualização na tabela...#
-lista_eixo_x = [ np.format_float_scientific( massax, precision=3, exp_digits=1 ) for massax in lista_eixo_x ]
-lista_eixo_y = [ np.format_float_scientific( massay, precision=3, exp_digits=1 ) for massay in lista_eixo_y ]
-lista_eixo_z = [ np.format_float_scientific( massaz, precision=3, exp_digits=1 ) for massaz in lista_eixo_z ]
-#exibição do dataframe#
+
 tabela = { f'Vazão de {nome_x} kg': lista_eixo_x,
            f'Vazão de {nome_y} kg': lista_eixo_y,
            f'Vazão de {nome_z} kg': lista_eixo_z,
@@ -302,3 +291,15 @@ if not pasta_de_vazoes.exists():
 
 tabela_de_vazoes.to_csv( f'{pasta_de_vazoes}/{massa_inicial_gasosa_fundo}_{massa_inicial_aquosa_fundo}_{quantidade_de_tempo}{unidade_de_tempo}.csv' )
 
+lista_eixo_x = [float(i) for i in lista_eixo_x]
+lista_eixo_y = [float(i) for i in lista_eixo_y]
+lista_eixo_z = [float(i) for i in lista_eixo_z]
+# Criação do gráfico 3D utilizando Matplotlib
+fig = plt.figure()
+ax = plt.axes( projection="3d" )
+ax.plot3D( lista_eixo_x, lista_eixo_y, lista_eixo_z, 'red' )
+ax.set_xlabel( f'Vazão de {nome_x} em kg', fontsize=12 )
+ax.set_ylabel( f'Vazão de {nome_y} em kg', fontsize=12 )
+ax.set_zlabel( f'Vazão de {nome_z} em kg', fontsize=12 )
+ax.scatter3D( lista_eixo_x, lista_eixo_y, lista_eixo_z, c=(lista_eixo_z), cmap='cividis' )
+plt.show()
