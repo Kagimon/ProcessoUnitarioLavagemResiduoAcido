@@ -35,14 +35,15 @@ Abra o terminal do seu Sistema Operacional com git instalado e clone o repositó
 -pip install tkinter-
         
 ### 🔩 Resultados do  código
-Resolução do problema acima junto de um gráfico e tabela que representam 12 horas do processo
+Resolução do problema acima junto de um gráfico e tabela que representam 12 horas do processo(código executado no bash do linux mint)
 
-[execução do código](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/execucaodocodigo.png)
+![execução do código](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/execucaodocodigo.png)
 
 
 **DIRETORIOS CRIADOS PELO SCRIPT**
+- O código cria diretórios nomeados pelas frações de ácido na entrada e na saída de efluente gasoso, e salva os DataFrames exportados como arquivos .csv nomeados com as vazões de entrada de efluente gasoso e saída de efluente aquoso e a quantidade de tempo do processo.
 
-[https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png)
+![https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png)
 
 
 
