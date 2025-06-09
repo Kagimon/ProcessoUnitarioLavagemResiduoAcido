@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from mpl_toolkits import mplot3d
 from decimal import Decimal
-
+from pathlib import Path
 # variáveis de cor para estilização#
 RED = "\033[1;31m"
 BLUE = "\033[1;34m"
@@ -23,7 +23,7 @@ while True:
 
     except Exception:
         print( "Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante" )
-        
+massa_inicial_gasosa_fundo = massa_entrada_gasosa_fundo    
 while True:
     try:
         fração_acido_entrada_fundo = Decimal("".join( input( '\nInsira a fração de ácido no efluente: ' ) ) )
@@ -52,6 +52,7 @@ while True:
         break
     except Exception:
         print( "Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante" )
+massa_inicial_aquosa_fundo = massa_saida_aquosa_fundo
 
 while True:
     try:
@@ -59,7 +60,7 @@ while True:
         break
     except Exception:
         print( "Valor inválido, por favor insira um número inteiro." )
-        
+
 #Loop While utilizado para repetir os inputs até que uma opção correta seja inserida
 while True:
     unidade_de_tempo = "".join( input( f'\nInforme a medida utilizada'
@@ -293,5 +294,11 @@ pd.set_option( 'display.max_columns', 4 )
 pd.set_option( 'display.expand_frame_repr', False )  
 tabela_de_vazoes = pd.DataFrame( tabela )
 print( tabela_de_vazoes )
-tabela_de_vazoes.to_csv( f'{massa_de_acido_entrada_fundo}{massa_de_agua}.csv' )
+
+pasta_de_vazoes = Path(f"{Path.cwd()}/{fração_acido_entrada_fundo}{fração_acido_saida_topo}")
+
+if not pasta_de_vazoes.exists():
+    pasta_de_vazoes.mkdir()
+
+tabela_de_vazoes.to_csv( f'{pasta_de_vazoes}/{massa_inicial_gasosa_fundo}_{massa_inicial_aquosa_fundo}_{quantidade_de_tempo}{unidade_de_tempo}.csv' )
 
