@@ -1,10 +1,11 @@
 # Importação das bibliotecas Matplotlib, Pandas, Numpy e Matplot3d para organizar e visualizar os dados gerados pelo script, além da biblioteca Decimal para realizar os calculos com exatidão de casas decimais
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt    
 import pandas as pd
 import numpy as np
 from mpl_toolkits import mplot3d
 from decimal import Decimal
 from pathlib import Path
+import conversão as conv # Importação do módulo de conversão para converter as unidades de tempo inseridas pelo usuário
 # variáveis de cor para estilização#
 RED = "\033[1;31m"
 BLUE = "\033[1;34m"
@@ -23,6 +24,7 @@ while True:
 
     except Exception:
         print( "Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante" )
+
 massa_inicial_gasosa_fundo = massa_entrada_gasosa_fundo    
 while True:
     try:
@@ -50,6 +52,7 @@ while True:
     try:
         massa_saida_aquosa_fundo = Decimal( "".join( input('\nInsira a vazão de efluente aquoso em kg/h: ').split() ) )
         break
+    
     except Exception:
         print( "Valor inválido, por favor insira apenas números inteiros ou com ponto flutuante" )
 massa_inicial_aquosa_fundo = massa_saida_aquosa_fundo
@@ -58,10 +61,12 @@ while True:
     try:
         quantidade_de_tempo = int("".join( input( 'Insira por quanto tempo quer projetar o processo? ' ).split() ) )
         break
+    
     except Exception:
         print( "Valor inválido, por favor insira um número inteiro." )
 
 #Loop While utilizado para repetir os inputs até que uma opção correta seja inserida
+
 while True:
     unidade_de_tempo = "".join( input( f'\nInforme a medida utilizada'
                              f'\n{GREEN}[h]{REVERSE} para horas'
@@ -86,76 +91,43 @@ while True:
 while True:
 
     if conversão == "1":
-        unidade_de_tempo = unidade_de_tempo
+        unidade_conversao = unidade_de_tempo
         break
 
     elif conversão == "2" and unidade_de_tempo == "h":
-        quantidade_de_tempo = 60 * quantidade_de_tempo
-        unidade_de_tempo = 'min'
+        unidade_conversao = 'min'
         break
 
     elif conversão == "2" and unidade_de_tempo == 'd':
-        unidade_de_tempo = "".join( input( f'\nConverter para horas{GREEN}(h){REVERSE}'
+        unidade_conversao = "".join( input( f'\nConverter para horas{GREEN}(h){REVERSE}'
                                  f'\nConverter para minutos{CYAN}(min): ' ).lower().split() )
 
-        if unidade_de_tempo == "h":
-            quantidade_de_tempo = quantidade_de_tempo * 24
-            break
-
-        elif unidade_de_tempo == "min":
-            quantidade_de_tempo = quantidade_de_tempo * 1440
-            break
-
+        if unidade_conversao not in 'hm':
+            print( f'{RED}Valor inválido!!!{REVERSE}' )
         else:
-            print( f'{RED}Valor inválido!!!{REVERSE}')
+            break
 
     elif conversão == "2" and unidade_de_tempo == 'm':
-        unidade_de_tempo = "".join( input( f'Converter para dias{RED}[d]{REVERSE}'
+        unidade_conversao= "".join( input( f'Converter para dias{RED}[d]{REVERSE}'
                                  f'\nConverter para horas{GREEN}[h]' ).lower().split() )
-        if unidade_de_tempo == 'd':
-            quantidade_de_tempo *= 30
-            break
-
-        elif unidade_de_tempo == 'h':
-            quantidade_de_tempo *= 24 * 30
-            break
-
+        if unidade_conversao not in 'dh':
+            print( f'{RED}Valor inválido!!!{REVERSE}')
         else:
-            print( f'{RED}Valor inválido!!!{REVERSE}' )
+            break
 
     else:
-        unidade_de_tempo = "".join( input( f'Converter para meses {CYAN}[m]{REVERSE}'
+        unidade_conversao = "".join( input( f'Converter para meses {CYAN}[m]{REVERSE}'
                                  f'\nConverter para dias {BLUE}[d]').lower().split() )
-        if unidade_de_tempo == "m":
-            quantidade_de_tempo *= 12
-            break
-
-        elif unidade_de_tempo == "d":
-            quantidade_de_tempo *= 12 * 30
-            break
-
-        else:
+        if unidade_conversao not in 'md':
             print( f'{RED}Valor inválido!!!{REVERSE}' )
+        
+        else:
+            break
 
-if unidade_de_tempo == "h":
-    massa_entrada_gasosa_fundo = massa_entrada_gasosa_fundo
-    massa_saida_aquosa_fundo = massa_saida_aquosa_fundo
+massa_entrada_gasosa_fundo = conv.converter_vazao( unidade_conversao, massa_entrada_gasosa_fundo )
+massa_saida_aquosa_fundo = conv.converter_vazao( unidade_conversao, massa_saida_aquosa_fundo )
+quantidade_de_tempo = conv.converter_quantidadetempo( unidade_de_tempo, unidade_conversao, quantidade_de_tempo )
 
-elif unidade_de_tempo == "min":
-    massa_entrada_gasosa_fundo /= 60
-    massa_saida_aquosa_fundo /= 60
-
-elif unidade_de_tempo == "d":
-    massa_entrada_gasosa_fundo *= 24
-    massa_saida_aquosa_fundo *= 24
-
-elif unidade_de_tempo == "m":
-    massa_entrada_gasosa_fundo *= 24 * 30
-    massa_saida_aquosa_fundo *= 24 * 30
-
-else:
-    massa_entrada_gasosa_fundo *= 24 * 30 * 12
-    massa_saida_aquosa_fundo *= 24 * 30 * 12
 #calculo utilizado para obter as variaveis desejadas do processo
 fração_ar_entrada_fundo = 1 - fração_acido_entrada_fundo
 fração_ar_saida_topo = 1 - fração_acido_saida_topo
@@ -167,7 +139,15 @@ fração_de_acido_saida_fundo = ( massa_de_acido_saida_fundo / massa_saida_aquos
 fração_de_agua_saida_fundo = 1 - fração_de_acido_saida_fundo
 massa_de_agua = fração_de_agua_saida_fundo * massa_saida_aquosa_fundo
 massa_de_saida_topo = massa_de_acido_saida_topo + massa_de_ar
+
 #Sessões de código utilizadas para escolher cada eixo do gráfico
+dict_eixo = {
+    "1": (massa_entrada_gasosa_fundo, 'efluente gasoso'),
+    "2": (massa_de_agua, 'água pura'),
+    "3": (massa_de_saida_topo, 'gás tratado'),
+    "4": (massa_saida_aquosa_fundo, 'efluente aquoso')
+}
+
 while True:
     eixo_x = "".join( input( f"\n{REVERSE}Qual o eixo x do gráfico?"
                    f"\n{RED}[1]{REVERSE} Vazão de entrada do efluente gasoso"
@@ -179,22 +159,9 @@ while True:
         print( f'{RED}Valor inválido!!!{REVERSE}' )
     else:
         break
-
-if eixo_x == "1":
-    massa_x = massa_entrada_gasosa_fundo
-    nome_x = 'efluente gasoso'
-
-elif eixo_x == "2":
-    massa_x = massa_de_agua
-    nome_x = 'água pura'
-
-elif eixo_x == "3":
-    massa_x = massa_de_saida_topo
-    nome_x = 'gás tratado'
-
-elif eixo_x == "4":
-    massa_x = massa_saida_aquosa_fundo
-    nome_x = 'efluente aquoso'
+##Acesso da massa e nome do eixo x no gráfico pelo dicionário#
+massa_x = dict_eixo[eixo_x][0]
+nome_x = dict_eixo[eixo_x][1]
 
 while True:
     eixo_y = "".join( input( "\nQual o eixo y do gráfico?"
@@ -208,21 +175,9 @@ while True:
     else:
         break
 
-if eixo_y == "1":
-    massa_y = massa_entrada_gasosa_fundo
-    nome_y = 'efluente gasoso'
-
-elif eixo_y == "2":
-    massa_y = massa_de_agua
-    nome_y = 'água pura'
-
-elif eixo_y == "3":
-    massa_y = massa_de_saida_topo
-    nome_y = 'gás tratado'
-
-elif eixo_y == "4":
-    massa_y = massa_saida_aquosa_fundo
-    nome_y = 'efluente aquoso'
+#Acesso da massa e nome do eixo y no gráfico pelo dicionário#
+massa_y = dict_eixo[eixo_y][0]
+nome_y = dict_eixo[eixo_y][1]
 
 while True:
     eixo_z = "".join( input( "\nQual o eixo z do gráfico?"
@@ -236,21 +191,9 @@ while True:
     else:
         break
 
-if eixo_z == "1":
-    massa_z = massa_entrada_gasosa_fundo
-    nome_z = 'efluente gasoso'
-
-elif eixo_z == "2":
-    massa_z = massa_de_agua
-    nome_z = 'água pura'
-
-elif eixo_z == "3":
-    massa_z = massa_de_saida_topo
-    nome_z = 'gás tratado'
-
-elif eixo_z == "4":
-    massa_z = massa_saida_aquosa_fundo
-    nome_z = 'efluente aquoso'
+#Acesso da massa e nome do eixo z no gráfico pelo dicionário#
+massa_z = dict_eixo[eixo_z][0]
+nome_z = dict_eixo[eixo_z][1]
 
 tempo = []
 count = 0
@@ -277,7 +220,7 @@ print( "\n" )
 tabela = { f'Vazão de {nome_x} kg': lista_eixo_x,
            f'Vazão de {nome_y} kg': lista_eixo_y,
            f'Vazão de {nome_z} kg': lista_eixo_z,
-           f'Tempo em {unidade_de_tempo}': tempo } 
+           f'Tempo em {unidade_conversao}': tempo } 
 pd.set_option( 'display.max_rows', 22000) 
 pd.set_option( 'display.max_columns', 4 )
 pd.set_option( 'display.expand_frame_repr', False )  
