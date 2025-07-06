@@ -45,7 +45,7 @@ Resolução do problema acima junto de um gráfico e tabela que representam 12 h
 
 ![https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png)
 
-*Gráfico que representa o processo**
+**Gráfico que representa o processo**
 ![https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/diretorio.png](https://github.com/Kagimon/ProcessoUnitarioLavagemResiduoAcido/blob/main/gr%C3%A1fico500.png)
 
 ## ✒️ Autores
