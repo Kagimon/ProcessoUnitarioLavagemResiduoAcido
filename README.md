@@ -5,6 +5,9 @@
 
 Uma indústria precisa tratar seu efluente gasoso que está contaminado com ácido sulfúrico. Para tratar 500 kg/h de um efluente que possui 30% em massa do ácido em ar atmosférico, a indústria dispõe de uma coluna de lavagem de gases. O efluente gasoso deve sair da coluna como uma concentração de no máximo 1% de ácido. Para tanto se usa uma corrente em contracorrente de água pura. 2000kg/h segue para uma ETE, antes do descarte final. Calcule, para estas condições, a vazão de água pura, a vazão do efluente gasoso e a fração em massa de ácido no rejeito líquido.(Problema apresentado pelo professor Andrey Oliveira de Souza
 
+O script salva a cada execução feita pelo usuário os dados do processo em arquivos .csv nomeados pelas vazoes de entrada e quantidade de tempo do processo, organizados em pastas nomeadas pelas frações de ácido na entrada e saída.
+### Ferramentas 
+Python3, Pandas, Matplotlib, Tkinter, Pathlib, NumPy
 
 ## 🚀 Começando
 
